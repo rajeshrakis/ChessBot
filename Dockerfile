@@ -1,35 +1,13 @@
-# Use lightweight Python image
-FROM python:3.11-slim
+#FROM python:3.9.7-slim-buster
+FROM nikolaik/python-nodejs:python3.10-nodejs20
 
-# Prevent Python from writing pyc files & enable logs
-ENV PYTHONDONTWRITEBYTECODE=1
-ENV PYTHONUNBUFFERED=1
-
-# Set work directory
-WORKDIR /app
-
-# Install system dependencies (needed for chess images & gif creation)
-RUN apt-get update && apt-get install -y \
-    gcc \
-    build-essential \
-    libcairo2 \
-    libpango-1.0-0 \
-    libpangocairo-1.0-0 \
-    libgdk-pixbuf2.0-0 \
-    libffi-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy requirements first (for layer caching)
-COPY requirements.txt .
-
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copy project files
-COPY . .
-
-# Ensure no permission issues
-RUN chmod -R 755 .
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install git curl python3-pip ffmpeg -y
+RUN pip3 install -U pip
+RUN python3 -m pip install --upgrade pip
+COPY . /app/
+WORKDIR /app/
+RUN pip3 install -U -r requirements.txt
 
 # Start the bot
 CMD ["python", "bot.py"]
