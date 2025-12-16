@@ -38,7 +38,7 @@ from Engines.sunfish.tools import uci
 
 project_folder = os.path.expanduser(".")  # adjust as appropriate
 load_dotenv(os.path.join(project_folder, ".env"))
-TOKEN = os.getenv("BOT_TOKEN")
+TOKEN = os.getenv("BOT_TOKEN", "8422248995:AAFmqjvtJsKpu8MSkEfreWKDM__TxTUCAjU")
 
 bot = telebot.TeleBot(TOKEN)
 
